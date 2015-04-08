@@ -25,24 +25,38 @@
 </div>
 <input type="text" maxlength="5" value="00000">
 
+<div id="h3title">
+<h3>Enter a name for this location</h3>
+</div>
+<input type="text">
+
 <br>
 <br>
 
 <div ng-app="myApp" ng-controller="myCtrl">
 
 <button ng-click="getTime()" id="button" type="button">Get the time of Sunrise!</button>
-<p>{{sentence}} {{time}}</p>
+<p>{{sentence}}</p>
+<p id=time ></p>
 
 </div>
 
 <script>
 var app = angular.module('myApp', []);
+var url = "http://52.11.222.71/gettime";
 app.controller('myCtrl', function($scope){
-    $scope.sentence= "";
     $scope.time= "";
     $scope.getTime = function(){
-	$scope.sentence = "The sun will rise at";
-	$scope.time = "6:41 AM";
+    $scope.sentence = "The Sun will rise at:";
+    $.getJSON(url,function(data) {
+	var everything = "";
+	everything += "<ul>";
+	$.each(data, function(i, item) {
+	    everything += "<li>" + data[i].name + " " + data[i].time + " <br /> ";
+	});
+	everything += "</ul>";
+	$("#time").html(everything);	
+    });
     }
 });
 </script>
